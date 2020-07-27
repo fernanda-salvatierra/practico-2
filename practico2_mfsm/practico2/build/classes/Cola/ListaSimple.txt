@@ -1,0 +1,164 @@
+package Cola;
+import Negocio.Nodo;
+
+public class ListaSimple {
+    private Nodo refPri;
+    public ListaSimple(){
+        this.refPri=null;
+    }
+    public Nodo getRefPri() {
+        return refPri;
+    }
+    public void setRefPri(Nodo refPri) {
+        this.refPri = refPri;
+    }
+    public boolean estaVacia(){
+        return this.refPri==null;
+    }
+    public void insertarOrdenado(int cod, String detalle){
+        Nodo nn = new Nodo(cod, detalle);
+        if(estaVacia()){
+            this.refPri = nn;
+        }else if(cod < this.refPri.getCod()){
+             nn.setRefNodo(this.refPri);
+             this.refPri = nn;
+        }else{
+            Nodo c = refPri;
+            boolean sw = false;
+            while(c.getRefNodo() != null){
+                if(nn.getCod() < c.getRefNodo().getCod()){
+                    sw = true;
+                    nn.setRefNodo(c.getRefNodo());
+                    c.setRefNodo(nn);
+                    break;
+                }else c = c.getRefNodo();
+            }
+            if(sw == false){
+                c.setRefNodo(nn);
+            }
+        }
+    }
+    public void EliminarCod(int num){
+        if(!estaVacia()){
+            Nodo aux=this.refPri;
+            if(num<=this.refPri.getCod()){
+                if(num==this.refPri.getCod()){
+                    this.refPri=this.refPri.getRefNodo();
+                    while(aux.getRefNodo()!=null && num==aux.getRefNodo().getCod()){
+                        aux.setRefNodo(aux.getRefNodo().getRefNodo());
+                    }
+                }
+            }else while(aux.getRefNodo()!=null && num>=aux.getRefNodo().getCod()){
+                if(num==aux.getRefNodo().getCod()){
+                    aux.setRefNodo(aux.getRefNodo().getRefNodo());
+                }else aux=aux.getRefNodo();
+            }
+        }
+    }
+    public void EliminarPri(){
+        if(!estaVacia()){
+            refPri=refPri.getRefNodo();
+        }
+    }
+    public int Tam(){
+        if(!estaVacia()){
+            Nodo aux=this.refPri;
+            int c=1;
+            while(aux.getRefNodo()!=null){
+                aux=aux.getRefNodo();
+                c++;
+            }
+            return c;
+        }
+        return 0;
+    }
+    public int Par(){
+        if(!estaVacia()){
+            Nodo aux=this.refPri;
+            int c=0;
+            while(aux!=null){
+                c= (aux.getCod() %2)==0 ? c+1:c;
+                aux=aux.getRefNodo();
+            }
+            return c;
+        }
+        return 0;
+    }
+    public double Promedio(){
+        if(!estaVacia()){
+            double i=0,S=0;
+            Nodo aux =this.refPri;
+            do{
+                i++;
+                S+=aux.getCod();
+                aux=aux.getRefNodo();
+            }while(aux!=null);
+            return Math.round(S/i*100.0)/100.0;
+        }else return 0;
+    }
+    public int SumaIntervalo(int a, int num){
+        if(!estaVacia()){
+            Nodo aux=this.refPri;
+            while(aux!=null){
+                if(a<=aux.getCod()){
+                    break;
+                }
+                aux=aux.getRefNodo();
+            }
+            int S=0;
+            while(aux!=null){
+                if(num<aux.getCod()){
+                    break;
+                }
+                S+=aux.getCod();
+                aux=aux.getRefNodo();
+            }
+            return S;
+        }else return 0;
+    }
+    public void EliminarUltimo(){
+        if(!estaVacia()){
+            if(this.refPri.getRefNodo()==null){
+                this.refPri=null;
+            }else{
+                Nodo aux=this.refPri;
+                while(aux.getRefNodo().getRefNodo()!=null){
+                    aux=aux.getRefNodo();
+                }
+                aux.setRefNodo(null);
+            }
+        }
+    }
+    public void EliminarPares(){
+        if(!estaVacia()){
+            while(this.refPri!=null && this.refPri.getCod()%2==0){
+                this.refPri = this.refPri.getRefNodo()==null? null:this.refPri.getRefNodo();
+            }
+            Nodo aux = this.refPri;
+            while(aux!=null){
+                while(aux.getRefNodo()!=null && aux.getRefNodo().getCod()%2==0){
+                    aux.setRefNodo(aux.getRefNodo().getRefNodo());
+                }
+                aux=aux.getRefNodo();
+            }    
+        }
+    }
+    public int ContarPrimos(){
+        if(!estaVacia()){
+            Nodo aux=this.refPri;
+            int c=0;
+            while(aux!=null){
+                if(aux.getCod()>1){
+                    for (int i=2;i<=aux.getCod();i++) {
+                        if(aux.getCod()%i!=0){
+                            c++;
+                        }
+                    }
+                }
+                aux=aux.getRefNodo();
+            }
+            return c;
+        }
+        return 0;
+    }
+}
